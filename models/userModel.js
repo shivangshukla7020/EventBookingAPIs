@@ -1,4 +1,4 @@
-import { DataTypes } from "sequelize";
+const { DataTypes } = require('sequelize');
 
 const createUserModel = (sequelize) => {
     const User = sequelize.define('User', {
@@ -13,8 +13,15 @@ const createUserModel = (sequelize) => {
         password : {
             type : DataTypes.STRING,
             allowNull : false,
+        },
+        role : {
+            type : DataTypes.STRING,
+            allowNull : false,
+            defaultValue : 'user',
+            validate : {
+                isIn: [['user','admin']]
+            }
         }
-        
     })
 
     return User;
