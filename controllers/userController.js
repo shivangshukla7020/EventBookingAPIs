@@ -2,7 +2,6 @@ require('dotenv').config();
 const { Users } = require('../database/initializeModels');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { json } = require('sequelize');
 
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
