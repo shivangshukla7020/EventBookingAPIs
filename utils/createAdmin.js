@@ -9,6 +9,13 @@ const createAdmin = async () =>{
         const email = process.env.ADMIN_EMAIL;
         const password = process.env.ADMIN_PASSWORD;
 
+        const checkExisting = await Users.findOne({where : {email}});
+
+        if(checkExisting){
+            console.log("Admin already exists");
+            return;
+        }
+
         console.log(userName   + " " + email + " " + password);
 
         const hashedPassword = await bcrypt.hash(password, 15);

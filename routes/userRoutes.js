@@ -5,17 +5,186 @@ const isAdmin = require('../middlewares/isAdmin');
 const isLoggedIn = require('../middlewares/isLoggedIn');
 const router = express.Router();
 
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: User management and authentication
+ */
+
+/**
+ * @swagger
+ * /user/signup:
+ *   post:
+ *     summary: Register a new user
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - userName
+ *               - email
+ *               - password
+ *             properties:
+ *               userName:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: User created successfully
+ *       400:
+ *         description: Missing or invalid fields
+ *       500:
+ *         description: Server error
+ */
 router.post('/signup', signupUser);
 
+/**
+ * @swagger
+ * /user/login:
+ *   post:
+ *     summary: Login a user
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User logged in successfully
+ *       400:
+ *         description: Invalid credentials
+ *       500:
+ *         description: Server error
+ */
 router.post('/login', loginUser);
 
+/**
+ * @swagger
+ * /user:
+ *   get:
+ *     summary: Get all users (admin only)
+ *     tags: [Users]
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: List of all users
+ *       403:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ */
 router.get('/',isLoggedIn, isAdmin, getAllUsers);
 
-router.get('/:userId',authorizeUserOrAdmin, findById);
+/**
+ * @swagger
+ * /user/{userId}:
+ *   get:
+ *     summary: Get user by ID (Authorized user or admin)
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the user
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: User data
+ *       403:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Server error
+ */
+router.get('/:userId', isLoggedIn, authorizeUserOrAdmin, findById);
 
-router.put('/:userId',authorizeUserOrAdmin, updateById);
+/**
+ * @swagger
+ * /user/{userId}:
+ *   put:
+ *     summary: Update user by ID (Authorized user or admin)
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the user
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userName:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User updated successfully
+ *       403:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Server error
+ */
+router.put('/:userId',isLoggedIn, authorizeUserOrAdmin, updateById);
 
-router.delete('/:userId',authorizeUserOrAdmin, deleteById);
-
+/**
+ * @swagger
+ * /user/{userId}:
+ *   delete:
+ *     summary: Delete user by ID (user or admin)
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the user
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: User deleted successfully
+ *       403:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Server error
+ */
+router.delete('/:userId', isLoggedIn, authorizeUserOrAdmin, deleteById);
 
 module.exports = router;

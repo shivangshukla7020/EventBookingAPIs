@@ -20,7 +20,7 @@ const signupUser = async (req, res) =>{
             return res.status(400).json({message : "User already exists"});
         }
 
-        const hashedPassword = bcrypt.hash(password, 15);
+        const hashedPassword = await bcrypt.hash(password, 15);
 
         const user = {
             userName,
@@ -84,8 +84,8 @@ const findById = async (req, res) =>{
 
 const updateById = async (req, res) =>{
     try{
-        const id = req.params.userId;
-        const user = await Users.findOne({where : { id }, attributes: { exclude: ['password'] }});
+        const userId = req.params.userId;
+        const user = await Users.findOne({where : { id : userId }});
         if(!user){
             return res.status(404).json({message : 'No user found'});
         }
@@ -115,7 +115,7 @@ const deleteById = async (req, res) =>{
         await Bookings.destroy({where : {userId}});
 
         await user.destroy();
-        
+
         return res.status(200).json({message : 'User deleted successfully'});
     }
     catch(err){

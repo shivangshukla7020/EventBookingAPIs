@@ -3,12 +3,12 @@ const isAdmin = async (req, res, next) => {
     try{
         const userRole = req.user.role;
         if(userRole != 'admin'){
-            return res.json({message : 'Unauthorized Access'});
+            return res.status(403).json({message : 'Unauthorized Access'});
         }
         next();
     }
     catch(err){
-        return res.json({message : 'Internal error occured'});
+        return res.status(500).json({message : 'Internal error occured'});
     }
 }
 
