@@ -4,6 +4,7 @@ const SECRET_KEY = process.env.JWT_SECRET_KEY;
 const { Bookings } = require('../database/initializeModels');
 
 // Checks for authorized user || admin for routes like {findById, updateById, deleteById etc};
+// It checks authorized user via params and bookings
 const authorizeUserOrAdmin = async (req, res, next) => {
     try{
         const userRole = req.user.role;
@@ -16,7 +17,6 @@ const authorizeUserOrAdmin = async (req, res, next) => {
             if(!booking){
                 return res.json(404).json({message : 'Booking not found'});
             }
-            
             userId = booking.userId;
         }
 
