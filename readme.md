@@ -135,7 +135,7 @@ A RESTful API for managing users, events, and bookings built using Node.js, Expr
    - No negative availability
    - Safe recalculation of seats during update/delete
    - Booking logic dynamically manages seats
-
+```
 ---
 
 ## 📎 Notes
