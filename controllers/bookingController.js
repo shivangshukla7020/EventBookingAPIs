@@ -2,11 +2,13 @@ const { Bookings, Events } = require('../database/initializeModels');
 
 const createBooking = async(req, res) => {
     try{
-        const { eventId, userId, seatsBooked } = req.body;
+        const { eventId, seatsBooked } = req.body;
 
-        if(!eventId || !userId || !seatsBooked){
+        if(!eventId || !seatsBooked){
             return res.status(400).json({message : 'All fields are required'});
         }
+
+        const userId = req.user.userId;
 
         if(seatsBooked <= 0){
             return res.status(400).json({message : 'At least one seat is required'});
@@ -106,13 +108,8 @@ const updateById = async(req, res) => {
 const deleteById = async(req, res) => {
     try{
         const bookingId = req.params.bookingId;
-        const userId = req.user.id;
 
-        if(!userId){
-            return res.status(400).json({message : 'Unauthorized'});
-        }
-
-        const booking = await Bookings.findOne({where : { id : bookingId, userId}});
+        const booking = await Bookings.findOne({where : { id : bookingId}});
 
         if(!booking){
             return res.status(404).json({message : 'Booking not found'});

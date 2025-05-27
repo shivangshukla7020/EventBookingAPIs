@@ -16,7 +16,7 @@ const router = express.Router();
  * @swagger
  * /booking:
  *   post:
- *     summary: Book an event
+ *     summary: Book an event (logged in user)
  *     tags: [Bookings]
  *     requestBody:
  *       required: true
@@ -26,13 +26,10 @@ const router = express.Router();
  *             type: object
  *             required:
  *               - eventId
- *               - userId
  *               - seatsBooked
  *             properties:
  *               eventId:
- *                 type: string
- *               userId:
- *                 type: string
+ *                 type: integer
  *               seatsBooked:
  *                 type: integer
  *     responses:
@@ -49,7 +46,7 @@ router.post('/', isLoggedIn, createBooking);
  * @swagger
  * /booking/my/{userId}:
  *   get:
- *     summary: Get all bookings of a user (admin and authorized user only)
+ *     summary: Get all bookings of a user (Authorized user or admin)
  *     tags: [Bookings]
  *     parameters:
  *       - in: path
@@ -63,13 +60,13 @@ router.post('/', isLoggedIn, createBooking);
  *       500:
  *         description: Server error
  */
-router.get('/my/:userId', authorizeUserOrAdmin, showMyBookings);
+router.get('/my/:userId', isLoggedIn, authorizeUserOrAdmin, showMyBookings);
 
 /**
  * @swagger
  * /booking:
  *   get:
- *     summary: Get all bookings on database (admin only)
+ *     summary: Get all bookings on database (admin)
  *     tags: [Bookings]
  *     responses:
  *       200:
@@ -83,7 +80,7 @@ router.get('/', isLoggedIn, isAdmin, getAllBookings);
  * @swagger
  * /booking/{bookingId}:
  *   get:
- *     summary: Get booking by ID (admin only)
+ *     summary: Get booking by ID (Authorized user or admin)
  *     tags: [Bookings]
  *     parameters:
  *       - in: path
@@ -99,13 +96,13 @@ router.get('/', isLoggedIn, isAdmin, getAllBookings);
  *       500:
  *         description: Server error
  */
-router.get('/:bookingId', authorizeUserOrAdmin, findById);
+router.get('/:bookingId', isLoggedIn, authorizeUserOrAdmin, findById);
 
 /**
  * @swagger
  * /booking/{bookingId}:
  *   put:
- *     summary: Update booking by ID (admin only)
+ *     summary: Update booking by ID (admin)
  *     tags: [Bookings]
  *     parameters:
  *       - in: path
@@ -125,9 +122,9 @@ router.get('/:bookingId', authorizeUserOrAdmin, findById);
  *               - seatsBooked
  *             properties:
  *               eventId:
- *                 type: string
+ *                 type: integer
  *               userId:
- *                 type: string
+ *                 type: integer
  *               seatsBooked:
  *                 type: integer
  *     responses:
@@ -140,13 +137,13 @@ router.get('/:bookingId', authorizeUserOrAdmin, findById);
  *       500:
  *         description: Server error
  */
-router.put('/:bookingId', isAdmin, updateById);
+router.put('/:bookingId', isLoggedIn, isAdmin, updateById);
 
 /**
  * @swagger
  * /booking/{bookingId}:
  *   delete:
- *     summary: Delete booking by ID (logged-in user)
+ *     summary: Delete booking by ID (Authorized user or admin)
  *     tags: [Bookings]
  *     parameters:
  *       - in: path
@@ -162,6 +159,6 @@ router.put('/:bookingId', isAdmin, updateById);
  *       500:
  *         description: Server error
  */
-router.delete('/:bookingId', isLoggedIn, deleteById);
+router.delete('/:bookingId', isLoggedIn, authorizeUserOrAdmin, deleteById);
 
 module.exports = router;
