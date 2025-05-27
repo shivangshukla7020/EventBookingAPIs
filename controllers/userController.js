@@ -40,6 +40,9 @@ const signupUser = async (req, res) =>{
 
 const loginUser = async (req, res) => {
     try{
+        if(req.cookies.jwt){
+            return res.status(400).json({message : 'Logout first'});
+        }
         const { email, password } = req.body;
 
         const user = await Users.findOne({where : { email }});
@@ -67,6 +70,17 @@ const loginUser = async (req, res) => {
         return res.status(500).json({message : `Internal error occured : ${err}`});
     }
 }
+
+const logoutUser = async (req, res) => {
+    try {
+        res.clearCookie('jwt', {
+            httpOnly: true,
+        });
+        return res.status(200).json({ message: 'Logout successful' });
+    } catch (err) {
+        return res.status(500).json({ message: `Internal error occurred: ${err}` });
+    }
+};
 
 const findById = async (req, res) =>{
     try{
@@ -134,4 +148,4 @@ const getAllUsers = async (req, res) => {
 };
 
 
-module.exports = { signupUser, loginUser, findById, updateById, deleteById, getAllUsers};
+module.exports = { signupUser, loginUser, logoutUser, findById, updateById, deleteById, getAllUsers};

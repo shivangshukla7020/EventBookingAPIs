@@ -1,5 +1,5 @@
 const express = require('express');
-const { signupUser, loginUser, findById, updateById, deleteById, getAllUsers } = require('../controllers/userController');
+const { signupUser, loginUser, logoutUser, findById, updateById, deleteById, getAllUsers } = require('../controllers/userController');
 const authorizeUserOrAdmin = require('../middlewares/authorizedUserOrAdmin');
 const isAdmin = require('../middlewares/isAdmin');
 const isLoggedIn = require('../middlewares/isLoggedIn');
@@ -77,9 +77,25 @@ router.post('/login', loginUser);
 
 /**
  * @swagger
+ * /user/logout:
+ *   post:
+ *     summary: Log out the current user
+ *     tags: [Users]
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: Logout successful
+ *       500:
+ *         description: Internal server error
+ */
+router.post('/logout', isLoggedIn, logoutUser);
+
+/**
+ * @swagger
  * /user:
  *   get:
- *     summary: Get all users (admin only)
+ *     summary: Get all users (admin)
  *     tags: [Users]
  *     security:
  *       - cookieAuth: []
@@ -164,7 +180,7 @@ router.put('/:userId',isLoggedIn, authorizeUserOrAdmin, updateById);
  * @swagger
  * /user/{userId}:
  *   delete:
- *     summary: Delete user by ID (user or admin)
+ *     summary: Delete user by ID (Authorized user or admin)
  *     tags: [Users]
  *     parameters:
  *       - in: path

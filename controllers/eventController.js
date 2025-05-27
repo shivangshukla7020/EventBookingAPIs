@@ -2,11 +2,14 @@ const { Events, Bookings } = require('../database/initializeModels');
 
 const createEvent = async (req, res) => {
     try{
-        const { title, description, dateTime, location, totalSeats, availableSeats } = req.body;
-        if(!title || !description || !dateTime || !location || !totalSeats || !availableSeats){
+        const { title, description, dateTime, location, totalSeats } = req.body;
+        if(!title || !description || !dateTime || !location || !totalSeats){
             return res.status(400).json({message : 'All feils are required'});
         }
-        await Events.create({ title, description, dateTime, location, totalSeats, availableSeats });
+        if(totalSeats <= 0){
+            return res.status(400).json({message : 'Total seats atleast 1 required'});
+        }
+        await Events.create({ title, description, dateTime, location, totalSeats, availableSeats : totalSeats });
         return res.status(201).json({message : 'Event created successfully'});
     }
     catch(err){
