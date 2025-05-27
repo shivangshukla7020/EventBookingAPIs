@@ -76,6 +76,20 @@ A RESTful API for managing users, events, and bookings built using Node.js, Expr
 
 ---
 
+## Environment Variables
+
+To run this project, you will need to set the following environment variables. You can do this by creating a `.env` file in the root directory of your project and adding the variables listed below:
+
+```env
+PORT=3000
+DATABASE_USERNAME=postgres
+DATABASE_PASSWORD=yourDbPassword
+JWT_SECRET_KEY=yourSecretKey
+ADMIN_USERNAME=admin
+ADMIN_EMAIL=admin@gmail.com
+ADMIN_PASSWORD=admin123
+```
+
 ## 🔄 Workflow Overview
 
 ### User Workflow
