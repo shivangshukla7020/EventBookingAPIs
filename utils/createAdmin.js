@@ -2,7 +2,7 @@ require('dotenv').config();
 const { Users } = require('../database/initializeModels');
 const bcrypt = require('bcrypt');
 
-// I created this to demonstrate the role based control
+// I created this to demonstrate the role based control (imported in connectDB )
 const createAdmin = async () =>{
     try{
         const userName = process.env.ADMIN_USERNAME;

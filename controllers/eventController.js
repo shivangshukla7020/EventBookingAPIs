@@ -92,3 +92,4 @@ const getAllEvents = async (req, res) => {
   }
 };
 
+module.exports = { createEvent, findById, updateById, deleteById, getAllEvents };
