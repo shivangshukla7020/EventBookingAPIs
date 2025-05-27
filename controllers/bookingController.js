@@ -62,9 +62,9 @@ const findById = async(req, res) => {
 const updateById = async(req, res) => {
     try{
         const bookingId = req.params.bookingId;
-        const booking = await Bookings.findOne({where : { id : bookingId}});
+        const prevBooking = await Bookings.findOne({where : { id : bookingId}});
 
-        if(!booking){
+        if(!prevBooking){
             return res.status(404).json({message : 'Booking not found'});
         }
         const { eventId, seatsBooked } = req.body;
@@ -73,29 +73,47 @@ const updateById = async(req, res) => {
             return res.status(400).json({message : 'All fields are required'});
         }
 
-        const event = await Events.findOne({where : { id : eventId }});
+        // If the new event is same as previous event
+        if (eventId == prevBooking.eventId) {
+            const event = await Events.findOne({where : {id : eventId}});
+            const freeSeats = event.availableSeats + prevBooking.seatsBooked;
 
-        if(!event){
-            return res.status(404).json({message : 'Event not found'});
+            if (freeSeats < seatsBooked) {
+                return res.status(400).json({ message: 'Not enough seats available' });
+            }
+
+            event.availableSeats = freeSeats - seatsBooked;
+            await event.save();
+        } 
+        // If they differ
+        else {
+            const oldEvent = await Events.findOne({ where: { id: prevBooking.eventId } });
+            const newEvent = await Events.findOne({ where: { id: eventId } });
+
+            if (!newEvent) {
+                return res.status(404).json({ message: 'New event not found' });
+            }
+
+            const freeSeats = newEvent.availableSeats;
+
+            if(freeSeats < seatsBooked){
+                return res.status(400).json({ message: 'Not enough seats available in the new event' });
+            }
+
+            oldEvent.availableSeats += prevBooking.seatsBooked;
+            await oldEvent.save();
+
+            newEvent.availableSeats -= seatsBooked;
+            await newEvent.save();
+
+            prevBooking.eventId = eventId;
         }
 
-        const prevSeatsBooked = booking.seatsBooked;
-        const freeSeats = event.availableSeats + prevSeatsBooked;
+        // Update booking regardless of event change
+        prevBooking.seatsBooked = seatsBooked;
+        await prevBooking.save();
 
-        if(freeSeats < seatsBooked){
-            return res.status(400).json({message : 'Not enough seats available'});
-        }
-
-        event.availableSeats = freeSeats - seatsBooked;
-
-        await event.save();
-
-        booking.eventId = eventId;
-        booking.seatsBooked = seatsBooked;
-
-        await booking.save();
-
-        res.status(200).json({message : 'Booking updated successfully'});
+        res.status(200).json({ message: 'Booking updated successfully' });
     }
     catch(err){
         console.log(err);
