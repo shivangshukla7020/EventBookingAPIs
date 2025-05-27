@@ -144,4 +144,4 @@ A RESTful API for managing users, events, and bookings built using Node.js, Expr
 - Swagger is used for documenting and testing APIs.
 - All endpoints are tested
 
-## http://localhost:3000/api-docs [Open this URL for reading api documentation]
+## http://localhost:3000/api-docs [Open this URL for reading api documentation once server is running]
