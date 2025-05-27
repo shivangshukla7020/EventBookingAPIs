@@ -9,7 +9,7 @@ router.post('/signup', signupUser);
 
 router.post('/login', loginUser);
 
-router.get('/getAllUsers',isLoggedIn, isAdmin, getAllUsers);
+router.get('/',isLoggedIn, isAdmin, getAllUsers);
 
 router.get('/:userId',authorizeUserOrAdmin, findById);
 

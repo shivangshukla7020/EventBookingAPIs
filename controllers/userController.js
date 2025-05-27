@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { Users } = require('../database/initializeModels');
+const { Users, Bookings } = require('../database/initializeModels');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -105,14 +105,18 @@ const updateById = async (req, res) =>{
 
 const deleteById = async (req, res) =>{
     try{
-        const id = req.params.userId;
-        const user = await Users.findOne({where : { id }, attributes: { exclude: ['password'] }});
+        const userId = req.params.userId;
+        const user = await Users.findOne({where : { id : userId }, attributes: { exclude: ['password'] }});
         if(!user){
             return res.status(404).json({message : 'No user found'});
         }
 
+        //We must ensure all related bookings gets removed too
+        await Bookings.destroy({where : {userId}});
+
         await user.destroy();
-        res.status(200).json({message : 'User deleted successfully'});
+        
+        return res.status(200).json({message : 'User deleted successfully'});
     }
     catch(err){
         return res.status(500).json({message : 'Internal error occured'});

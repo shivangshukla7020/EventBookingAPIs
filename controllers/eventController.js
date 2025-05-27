@@ -1,4 +1,4 @@
-const { Events } = require('../database/initializeModels');
+const { Events, Bookings } = require('../database/initializeModels');
 
 const createEvent = async (req, res) => {
     try{
@@ -73,8 +73,12 @@ const deleteById = async (req, res) =>{
         if(!event){
             return res.status(404).json({message : 'Event not found'});
         }
+
+        //We must ensure that all bookings related to this event gets removed
+        await Bookings.destroy({where : { eventId }});
+
         await event.destroy();
-        res.status(200).json({message : 'Event removed successfully'});
+        return res.status(200).json({message : 'Event and all associated bookings removed successfully'});
     }
     catch(err){
         console.log(err);
