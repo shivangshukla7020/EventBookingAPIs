@@ -67,9 +67,9 @@ const updateById = async(req, res) => {
         if(!booking){
             return res.status(404).json({message : 'Booking not found'});
         }
-        const { eventId, userId, seatsBooked } = req.body;
+        const { eventId, seatsBooked } = req.body;
 
-        if(!eventId || !userId || !seatsBooked){
+        if(!eventId || !seatsBooked){
             return res.status(400).json({message : 'All fields are required'});
         }
 
@@ -91,7 +91,6 @@ const updateById = async(req, res) => {
         await event.save();
 
         booking.eventId = eventId;
-        booking.userId = userId;
         booking.seatsBooked = seatsBooked;
 
         await booking.save();

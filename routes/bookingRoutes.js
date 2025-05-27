@@ -118,12 +118,9 @@ router.get('/:bookingId', isLoggedIn, authorizeUserOrAdmin, findById);
  *             type: object
  *             required:
  *               - eventId
- *               - userId
  *               - seatsBooked
  *             properties:
  *               eventId:
- *                 type: integer
- *               userId:
  *                 type: integer
  *               seatsBooked:
  *                 type: integer
