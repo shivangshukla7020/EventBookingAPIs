@@ -86,7 +86,7 @@ router.get('/:eventId', findById);
  * @swagger
  * /event/{eventId}:
  *   put:
- *     summary: Update an event (admin only)
+ *     summary: Update an event (admin)
  *     tags: [Events]
  *     parameters:
  *       - in: path

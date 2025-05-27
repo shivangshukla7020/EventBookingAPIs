@@ -16,7 +16,7 @@ const router = express.Router();
  * @swagger
  * /user/signup:
  *   post:
- *     summary: Register a new user
+ *     summary: Register a new user (anyone)
  *     tags: [Users]
  *     requestBody:
  *       required: true
@@ -49,7 +49,7 @@ router.post('/signup', signupUser);
  * @swagger
  * /user/login:
  *   post:
- *     summary: Login a user
+ *     summary: Login a user (registered users)
  *     tags: [Users]
  *     requestBody:
  *       required: true
@@ -79,7 +79,7 @@ router.post('/login', loginUser);
  * @swagger
  * /user/logout:
  *   post:
- *     summary: Log out the current user
+ *     summary: Log out the current user (logged in user)
  *     tags: [Users]
  *     security:
  *       - cookieAuth: []
