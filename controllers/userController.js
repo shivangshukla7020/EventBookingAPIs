@@ -11,13 +11,13 @@ const signupUser = async (req, res) =>{
         const { userName, email, password } = req.body;
 
         if(!userName || !email || !password){
-            return res.json({message : "All feilds are required"});
+            return res.status(400).json({message : "All feilds are required"});
         }
 
         const existing = await Users.findOne({where : { email }});
 
         if(existing){
-            return res.json({message : "User already exists"});
+            return res.status(400).json({message : "User already exists"});
         }
 
         const hashedPassword = bcrypt.hash(password, 15);
@@ -31,7 +31,7 @@ const signupUser = async (req, res) =>{
 
         await Users.create(user);
 
-        res.status(200).json({message : "User created successfully"});
+        res.status(201).json({message : "User created successfully"});
     }
     catch(err){
         return res.status(500).json({message : `Internal error occured : ${err}`});
@@ -45,13 +45,13 @@ const loginUser = async (req, res) => {
         const user = await Users.findOne({where : { email }});
 
         if(!user){
-            return res.json({message : 'User not found'});
+            return res.status(404).json({message : 'No user found'});
         }
 
         const checkPassword = await bcrypt.compare(password, user.password);
 
         if(!checkPassword){
-            return res.json({message : 'Wrong password'});
+            return res.status(400).json({message : 'Wrong password'});
         }
 
         const jwt_token = jwt.sign({userId : user.id, role : user.role}, SECRET_KEY, {expiresIn : '2h'});
@@ -73,9 +73,9 @@ const findById = async (req, res) =>{
         const id = req.params.userId;
         const user = await Users.findOne({where : { id }, attributes: { exclude: ['password'] }});
         if(!user){
-            return res.json({message : 'No user found'});
+            return res.status(404).json({message : 'No user found'});
         }
-        res.json(user);
+        res.status(200).json(user);
     }
     catch(err){
         return res.status(500).json({message : 'Internal error occured'});
@@ -87,7 +87,7 @@ const updateById = async (req, res) =>{
         const id = req.params.userId;
         const user = await Users.findOne({where : { id }, attributes: { exclude: ['password'] }});
         if(!user){
-            return res.json({message : 'No user found'});
+            return res.status(404).json({message : 'No user found'});
         }
         const { userName, email, password } = req.body;
 
@@ -96,7 +96,7 @@ const updateById = async (req, res) =>{
         user.password = await bcrypt.hash(password,15);
 
         await user.save();
-        res.json({message : 'User updated successfully'});
+        res.status(200).json({message : 'User updated successfully'});
     }
     catch(err){
         return res.status(500).json({message : 'Internal error occured'});
@@ -108,11 +108,11 @@ const deleteById = async (req, res) =>{
         const id = req.params.userId;
         const user = await Users.findOne({where : { id }, attributes: { exclude: ['password'] }});
         if(!user){
-            return res.json({message : 'No user found'});
+            return res.status(404).json({message : 'No user found'});
         }
 
         await user.destroy();
-        res.json({message : 'User deleted successfully'});
+        res.status(200).json({message : 'User deleted successfully'});
     }
     catch(err){
         return res.status(500).json({message : 'Internal error occured'});
@@ -122,7 +122,7 @@ const deleteById = async (req, res) =>{
 const getAllUsers = async (req, res) => {
   try {
     const users = await Users.findAll({ attributes: { exclude: ['password'] } });
-    res.json(users);
+    res.status(200).json(users);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Internal server error' });

@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 
-// This middleware is specifically for userController {findById, deleteById} to deny unauthorized user data access but gives admin access
+// This middleware is specifically for userController {findById, updateById, deleteById} to deny unauthorized user data access but allows admin access
 const authorizeUserOrAdmin = async (req, res, next) => {
     const jwt_token = req.cookies.jwt;
 

@@ -1,7 +1,3 @@
-require('dotenv').config();
-const jwt = require('jsonwebtoken');
-const SECRET_KEY = process.env.JWT_SECRET_KEY;
-
 const isAdmin = async (req, res, next) => {
 
     try{
