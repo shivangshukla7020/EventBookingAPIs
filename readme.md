@@ -144,4 +144,21 @@ A RESTful API for managing users, events, and bookings built using Node.js, Expr
 - Swagger is used for documenting and testing APIs.
 - All endpoints are tested
 
+## 🚀 Installation
+
+```bash
+# 1. Clone the repo
+git clone https://github.com/shivangshukla7020/EventBookingAPIs
+cd EventBookingAPIs
+
+# 2. Install dependencies
+npm install
+
+# 3. Configure environment (consider sample .env file)
+
+# 4. Ensure postgres is installed along with PG Admin 4
+
+# 5. Start the server
+npm start
+
 ## http://localhost:3000/api-docs [Open this URL for reading api documentation once server is running]
