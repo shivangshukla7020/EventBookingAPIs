@@ -160,5 +160,5 @@ npm install
 
 # 5. Start the server
 npm start
-
+```
 ## http://localhost:3000/api-docs [Open this URL for reading api documentation once server is running]
