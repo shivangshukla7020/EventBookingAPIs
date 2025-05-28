@@ -9,7 +9,7 @@ const router = express.Router();
  * @swagger
  * tags:
  *   name: Users
- *   description: User management and authentication
+ *   description: User related operations
  */
 
 /**
@@ -37,9 +37,9 @@ const router = express.Router();
  *                 type: string
  *     responses:
  *       201:
- *         description: User created successfully
+ *         description: User created successfuly
  *       400:
- *         description: Missing or invalid fields
+ *         description: Missing or invalid feilds
  *       500:
  *         description: Server error
  */
@@ -67,11 +67,11 @@ router.post('/signup', signupUser);
  *                 type: string
  *     responses:
  *       200:
- *         description: User logged in successfully
- *       400:
- *         description: Invalid credentials
+ *         description: User logged in successfuly
  *       500:
  *         description: Server error
+ *       400:
+ *         description: Invalid credentials
  */
 router.post('/login', loginUser);
 
@@ -98,10 +98,10 @@ router.post('/logout', isLoggedIn, logoutUser);
  *     responses:
  *       200:
  *         description: List of all users
- *       403:
- *         description: Unauthorized
  *       500:
- *         description: Server error
+ *         description: Internal Server error
+ *       403:
+ *         description: Unauthorized access
  */
 router.get('/',isLoggedIn, isAdmin, getAllUsers);
 
@@ -122,11 +122,11 @@ router.get('/',isLoggedIn, isAdmin, getAllUsers);
  *       200:
  *         description: User data
  *       403:
- *         description: Unauthorized
+ *         description: Unauthorized access
  *       404:
- *         description: User not found
+ *         description: user not found
  *       500:
- *         description: Server error
+ *         description: internal Server error
  */
 router.get('/:userId', isLoggedIn, authorizeUserOrAdmin, findById);
 
@@ -158,13 +158,13 @@ router.get('/:userId', isLoggedIn, authorizeUserOrAdmin, findById);
  *                 type: string
  *     responses:
  *       200:
- *         description: User updated successfully
+ *         description: User updated successfuly
  *       403:
- *         description: Unauthorized
+ *         description: Unauthorized access
+ *       500:
+ *         description: Internal Server error
  *       404:
  *         description: User not found
- *       500:
- *         description: Server error
  */
 router.put('/:userId',isLoggedIn, authorizeUserOrAdmin, updateById);
 
@@ -180,16 +180,16 @@ router.put('/:userId',isLoggedIn, authorizeUserOrAdmin, updateById);
  *         schema:
  *           type: string
  *         required: true
- *         description: ID of the user
+ *         description: ID of the user to be fetched
  *     responses:
  *       200:
  *         description: User deleted successfully
- *       403:
- *         description: Unauthorized
  *       404:
  *         description: User not found
+ *       403:
+ *         description: Unauthorized access
  *       500:
- *         description: Server error
+ *         description: Internal Server error
  */
 router.delete('/:userId', isLoggedIn, authorizeUserOrAdmin, deleteById);
 

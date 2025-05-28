@@ -8,7 +8,7 @@ const router = express.Router();
  * @swagger
  * tags:
  *   name: Events
- *   description: Event-related operations
+ *   description: Events related operations
  */
 
 /**
@@ -46,7 +46,7 @@ const router = express.Router();
  *       201:
  *         description: Event created successfully
  *       400:
- *         description: Bad request
+ *         description: Unable to process request
  */
 router.post('/', isLoggedIn, isAdmin, createEvent);
 
@@ -74,14 +74,14 @@ router.get('/', getAllEvents)
  *         required: true
  *         schema:
  *           type: string
+ *         description: Id of the event to be fetched
  *     responses:
  *       200:
- *         description: Event details
+ *         description: Event details fetched successfuly
  *       404:
  *         description: Event not found
  */
 router.get('/:eventId', findById);
-
 /**
  * @swagger
  * /event/{eventId}:
@@ -115,10 +115,10 @@ router.get('/:eventId', findById);
  *     responses:
  *       200:
  *         description: Event updated successfully
- *       400:
- *         description: Total seats cannot be less than booked seats
  *       404:
  *         description: Event not found
+ *       400:
+ *         description: Total seats can't be lesser than book seats
  */
 router.put('/:eventId', isLoggedIn, isAdmin, updateById);
 
@@ -136,10 +136,9 @@ router.put('/:eventId', isLoggedIn, isAdmin, updateById);
  *           type: string
  *     responses:
  *       200:
- *         description: Event deleted
+ *         description: Event removed successfully
  *       404:
  *         description: Event not found
  */
 router.delete('/:eventId', isLoggedIn, isAdmin, deleteById);
-
 module.exports = router;

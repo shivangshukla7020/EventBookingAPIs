@@ -9,7 +9,7 @@ const router = express.Router();
  * @swagger
  * tags:
  *   name: Bookings
- *   description: Booking-related operations
+ *   description: Booking related Operations
  */
 
 /**
@@ -35,10 +35,10 @@ const router = express.Router();
  *     responses:
  *       201:
  *         description: Booking successful
- *       400:
- *         description: Missing or invalid fields
  *       500:
  *         description: Server error
+ *       400:
+ *         description: Missing or invalid fields
  */
 router.post('/', isLoggedIn, createBooking);
 
@@ -51,14 +51,15 @@ router.post('/', isLoggedIn, createBooking);
  *     parameters:
  *       - in: path
  *         name: userId
+ *         required: true
  *         schema:
  *           type: string
- *         required: true
+ *         description: The id of the user whose bookings are required
  *     responses:
- *       200:
- *         description: List of all bookings of a user
  *       500:
  *         description: Server error
+ *       200:
+ *         description: List of all bookings of a user
  */
 router.get('/my/:userId', isLoggedIn, authorizeUserOrAdmin, showMyBookings);
 
@@ -70,11 +71,12 @@ router.get('/my/:userId', isLoggedIn, authorizeUserOrAdmin, showMyBookings);
  *     tags: [Bookings]
  *     responses:
  *       200:
- *         description: List of all bookings
+ *         description: Gives all bookings
  *       500:
  *         description: Server error
  */
 router.get('/', isLoggedIn, isAdmin, getAllBookings);
+
 
 /**
  * @swagger
@@ -89,12 +91,12 @@ router.get('/', isLoggedIn, isAdmin, getAllBookings);
  *           type: string
  *         required: true
  *     responses:
+ *       500:
+ *         description: Internal Server error
  *       200:
- *         description: Booking data
+ *         description: Booking details of the user
  *       404:
  *         description: Booking not found
- *       500:
- *         description: Server error
  */
 router.get('/:bookingId', isLoggedIn, authorizeUserOrAdmin, findById);
 
@@ -126,9 +128,7 @@ router.get('/:bookingId', isLoggedIn, authorizeUserOrAdmin, findById);
  *                 type: integer
  *     responses:
  *       200:
- *         description: Booking updated successfully
- *       400:
- *         description: Missing or invalid fields
+ *         description: Booking updated successfuly
  *       404:
  *         description: Booking not found
  *       500:
@@ -140,7 +140,7 @@ router.put('/:bookingId', isLoggedIn, isAdmin, updateById);
  * @swagger
  * /booking/{bookingId}:
  *   delete:
- *     summary: Delete booking by ID (Authorized user or admin)
+ *     summary: Delete a booking by ID (Authorized user or admin)
  *     tags: [Bookings]
  *     parameters:
  *       - in: path
@@ -149,13 +149,14 @@ router.put('/:bookingId', isLoggedIn, isAdmin, updateById);
  *           type: string
  *         required: true
  *     responses:
+ *       500:
+ *         description: Inrtrnal Server error
  *       200:
  *         description: Booking deleted successfully
  *       404:
  *         description: Booking not found
- *       500:
- *         description: Server error
  */
 router.delete('/:bookingId', isLoggedIn, authorizeUserOrAdmin, deleteById);
 
 module.exports = router;
+
