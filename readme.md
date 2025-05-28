@@ -145,6 +145,7 @@ password - admin123
 
 ## 📎 Notes
 
+- Any CRUD operation ensures integrity and checks for existence of events, users and bookings before making any action.
 - Every sensitive routes are protected via middlewares with rol based control access.
 - Swagger is used for documenting and testing APIs.
 - All endpoints are tested successfully.
