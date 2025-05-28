@@ -183,7 +183,7 @@ router.put('/:userId',isLoggedIn, authorizeUserOrAdmin, updateById);
  *         description: ID of the user to be fetched
  *     responses:
  *       200:
- *         description: User deleted successfully
+ *         description: User deleted successfully and all associated bookings too
  *       404:
  *         description: User not found
  *       403:
