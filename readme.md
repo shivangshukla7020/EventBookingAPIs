@@ -42,8 +42,8 @@ This restFul API is designed for an event Booking system that can be used to man
 
 | Method | Endpoint       | Description                    | Access          |
 |--------|----------------|--------------------------------|-----------------|
-| POST   | `/user/signup` | Registers a new user           | Anyone          |
-| POST   | `/user/login`  | Logs in and issues JWT cookie  | Anyone          |
+| POST   | `/user/signup` | Registers a new user           | Public          |
+| POST   | `/user/login`  | Logs in and issues JWT cookie  | Public          |
 | POST   | `/user/logout` | Logs out and clears the cookie | Logged in User  |
 | GET    | `/user/`       | Get all users                  | Admin only      |
 | GET    | `/user/:userId`| Get a user by ID               | Admin/AuthUser  |
