@@ -56,7 +56,7 @@ A RESTful API for managing users, events, and bookings built using Node.js, Expr
 | Method | Endpoint          | Description                | Access     |
 |--------|-------------------|----------------------------|------------|
 | POST   | `/event/`         | Create a new event         | Admin only |
-| GET    | `/events/`        | Get all events             | Public     |
+| GET    | `/event/`        | Get all events             | Public     |
 | GET    | `/event/:eventId` | Get a specific event       | Public     |
 | PUT    | `/event/:eventId` | Update an event by ID      | Admin only |
 | DELETE | `/event/:eventId` | Delete an event by ID      | Admin only |
