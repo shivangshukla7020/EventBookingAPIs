@@ -38,10 +38,10 @@ const router = express.Router();
  *     responses:
  *       201:
  *         description: User created successfuly
- *       400:
- *         description: Missing or invalid feilds
  *       500:
  *         description: Server error
+ *       400:
+ *         description: Missing or invalid feilds
  */
 router.post('/signup', signupUser);
 
