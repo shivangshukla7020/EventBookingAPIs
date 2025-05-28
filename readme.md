@@ -1,8 +1,8 @@
 # Event Booking System API
 
-A RESTful API for managing users, events, and bookings built using Node.js, Express.js, Sequelize, and PostgreSQL. This API supports secure user authentication, event creation, and booking with role-based access control for (admin || user).
+A RESTful API designed managing users, events, and bookings, it is built using Node.js, Express.js, Sequelize, and PostgreSQL. The API supports secure user authentication, event creation, and booking creation with role based access control for (admin / user).
 
-## 📁 Technologies Used
+## 📁 Tech Stack Used
 
 - Node.js
 - Express.js
@@ -18,7 +18,7 @@ A RESTful API for managing users, events, and bookings built using Node.js, Expr
 
 ### Authentication & Roles
 
-- Users can sign up and log in.
+- New Users can sign up.
 - JWT tokens are issued upon login and stored in HTTP-only cookies.
 - Two roles:
   - `user`: Can book events and can view and delete their own bookings.
@@ -26,15 +26,15 @@ A RESTful API for managing users, events, and bookings built using Node.js, Expr
 
 ---
 
-## 🔐 Middleware
+## 🔐 Middlewares
 
-- **`isLoggedIn`**: Verifies the presence and validity of JWT in cookies.
-- **`isAdmin`**: Grants access to admin-only routes.
+- **`isLoggedIn`**: Verifies if the user is logged in by the presence and validity of JWT token in cookies.
+- **`isAdmin`**: This Grants access to admin only routes.
 - **`authorizeUserOrAdmin`**: Allows access if the logged-in user is an admin or the owner of the resource (based on `userId` or `bookingId`).
 
 ---
 
-## 📌 Endpoints
+## 📌 API Endpoints
 
 ---
 
@@ -57,10 +57,10 @@ A RESTful API for managing users, events, and bookings built using Node.js, Expr
 | Method | Endpoint          | Description                | Access     |
 |--------|-------------------|----------------------------|------------|
 | POST   | `/event/`         | Create a new event         | Admin only |
-| GET    | `/event/`        | Get all events             | Public     |
+| GET    | `/event/`         | Get all the events         | Public     |
 | GET    | `/event/:eventId` | Get a specific event       | Public     |
-| PUT    | `/event/:eventId` | Update an event by ID      | Admin only |
-| DELETE | `/event/:eventId` | Delete an event by ID      | Admin only |
+| PUT    | `/event/:eventId` | Update event by ID         | Admin only |
+| DELETE | `/event/:eventId` | Delete event by ID         | Admin only |
 
 ---
 
@@ -70,16 +70,16 @@ A RESTful API for managing users, events, and bookings built using Node.js, Expr
 |--------|-------------------------|------------------------------------|-----------------|
 | POST   | `/booking/`             | Book an event                      | Logged-in User  |
 | GET    | `/booking/my/:userId`   | Get bookings of a specific user    | Admin/AuthUser  |
-| GET    | `/booking/`             | Get all bookings                   | Admin only      |
+| GET    | `/booking/`             | Get all the bookings               | Admin only      |
 | GET    | `/booking/:bookingId`   | Get a booking by ID                | Admin/AuthUser  |
-| PUT    | `/booking/:bookingId`   | Update a booking by ID             | Admin only      |
-| DELETE | `/booking/:bookingId`   | Delete a booking by ID             | Logged-in User  |
+| PUT    | `/booking/:bookingId`   | Update booking by ID               | Admin only      |
+| DELETE | `/booking/:bookingId`   | Delete booking by ID               | Logged-in User  |
 
 ---
 
 ## Environment Variables
 
-To run this project, you will need to set the following environment variables. You can do this by creating a `.env` file in the root directory of your project and adding the variables listed below:
+To run this project, you will need to set the following environment variables. You can do this by creating a `.env` file in the root directory of the project (consider .env.sample) and add the variables given below: 
 
 ```env
 PORT=3000
@@ -111,7 +111,7 @@ ADMIN_PASSWORD=admin123
 
 1. **Booking an Event:**
    - A user books a number of seats via `/bookings`.
-   - The system checks:
+   - The system will check:
      - If requested seats are available.
      - If total available seats ≥ seats requested.
      - That seats cannot be negative or overbooked.
