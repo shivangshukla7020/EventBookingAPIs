@@ -95,10 +95,10 @@ ADMIN_PASSWORD=admin123
 
 ### User Workflow
 
-1. Register an accound using `/users/signup`
-2. Log in via `/users/login` → JWT token is issued in the cookies
-3. Access your data `/users/:userId` (same route is used for update and delete via PUT and DELETE req)
-4. Log out using `/users/logout`
+1. Register an accound using `/user/signup`
+2. Log in via `/user/login` → JWT token is issued in the cookies
+3. Access your data `/user/:userId` (same route is used for update and delete via PUT and DELETE req)
+4. Log out using `/user/logout`
 
 ### Admin Workflow
 
@@ -107,7 +107,7 @@ ADMIN_PASSWORD=admin123
 email - admin@gmail.com
 password - admin123
 ```
-2. All CRUD operations allowed via `/events`
+2. All CRUD operations allowed via `/event`
 3. Can manage CRUD for users and events as well
 4. Admin can delete users/events/bookings and all associated bookings will also be deleted automatically
 
@@ -115,7 +115,7 @@ password - admin123
 ## 🪑 Seat Management + Availability & Booking Flow
 
 1. **Booking an Event:**
-   - Logged in user can book a number of seats via `/bookings`.
+   - Logged in user can book a number of seats via `/booking`.
    - Then the system will check:
      - If the requested seats are available for the chosen event.
      - If the total available seats ≥ seats requested.
