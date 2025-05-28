@@ -1,16 +1,16 @@
 # Event Booking System API
 
-A RESTful API designed managing users, events, and bookings, it is built using Node.js, Express.js, Sequelize, and PostgreSQL. The API supports secure user authentication, event creation, and booking creation with role based access control for (admin / user).
+This restFul API is designed for an event Booking system that can be used to manage users, events and bookings via role based access control for (Admin / User). It is robust and dockerized with all endpoints tested.
 
 ## 📁 Tech Stack Used
 
-- Node.js
-- Express.js
-- Sequelize (ORM)
+- Node JS
+- Express JS
 - PostgreSQL
-- JWT (Authentication)
+- Sequelize JS
+- JWT (Authentication System)
 - Swagger (API Documentation)
-- docker (image + container)
+- docker (Image + container)
 
 ---
 
@@ -18,19 +18,19 @@ A RESTful API designed managing users, events, and bookings, it is built using N
 
 ### Authentication & Roles
 
-- New Users can sign up.
-- JWT tokens are issued upon login and stored in HTTP-only cookies.
-- Two roles:
-  - `user`: Can book events and can view and delete their own bookings.
-  - `admin`: Can create, update, and delete events. Can also manage all bookings and users.
+- New users can signup via /user/signup
+- When logging in the JWT tokens are issued in cookies
+- Role based access control:
+  - `user`: Allowed to book events and can view and delete their own bookings.
+  - `admin`: Allowed to create, update, and delete events. They can also manage users and bookings
 
 ---
 
 ## 🔐 Middlewares
 
-- **`isLoggedIn`**: Verifies if the user is logged in by the presence and validity of JWT token in cookies.
-- **`isAdmin`**: This Grants access to admin only routes.
-- **`authorizeUserOrAdmin`**: Allows access if the logged-in user is an admin or the owner of the resource (based on `userId` or `bookingId`).
+- **`isLoggedIn`**: This middleware checks for JWT token presence in cookies and validates it.
+- **`isAdmin`**: Once logged in this middleware checks if the logged in user is Admin or not.
+- **`authorizedUserOrAdmin`**: It allows access for resource owner or the admin (based on `userId` or `bookingId` in pram).
 
 ---
 
@@ -42,9 +42,9 @@ A RESTful API designed managing users, events, and bookings, it is built using N
 
 | Method | Endpoint       | Description                    | Access          |
 |--------|----------------|--------------------------------|-----------------|
-| POST   | `/user/signup` | Register a new user            | Public          |
-| POST   | `/user/login`  | Log in and receive JWT cookie  | Public          |
-| POST   | `/user/logout` | Log out and clear cookie       | Logged-in User  |
+| POST   | `/user/signup` | Registers a new user           | Anyone          |
+| POST   | `/user/login`  | Logs in and issues JWT cookie  | Anyone          |
+| POST   | `/user/logout` | Logs out and clears the cookie | Logged in User  |
 | GET    | `/user/`       | Get all users                  | Admin only      |
 | GET    | `/user/:userId`| Get a user by ID               | Admin/AuthUser  |
 | PUT    | `/user/:userId`| Update user info by ID         | Admin/AuthUser  |
@@ -79,7 +79,7 @@ A RESTful API designed managing users, events, and bookings, it is built using N
 
 ## Environment Variables
 
-To run this project, you will need to set the following environment variables. You can do this by creating a `.env` file in the root directory of the project (consider .env.sample) and add the variables given below: 
+Before running make sure to set up this .env file in your root project directory, consider the file '.env.sample' having all the feilds listed below:
 
 ```env
 PORT=3000
@@ -95,69 +95,59 @@ ADMIN_PASSWORD=admin123
 
 ### User Workflow
 
-1. Signup using `/users/signup`
-2. Login using `/users/login` → JWT cookie issued
-3. Access profile using `/users/:userId` or update/delete
-4. Logout with `/users/logout`
+1. Register an accound using `/users/signup`
+2. Log in via `/users/login` → JWT token is issued in the cookies
+3. Access your data `/users/:userId` (same used for update and delete via PUT and DELETE req)
+4. Log out using `/users/logout`
 
 ### Admin Workflow
 
-1. Login as admin
-2. Create/update/delete events via `/events`
-3. View or manage all users and bookings
+1. Log in as admin (In utils folder a script is there to generate an admin when server starts, you can login via)
+```
+email - admin@gmail.com
+password - admin123
+```
+2. All CRUD operations allowed via `/events`
+3. Can manage CRUD for users and events as well
+4. Admin can delete users/events/bookings and all associated bookings will also be deleted automatically
 
 
-## 🪑 Seat Management & Booking Flow
+## 🪑 Seat Management + Availability & Booking Flow
 
 1. **Booking an Event:**
-   - A user books a number of seats via `/bookings`.
-   - The system will check:
-     - If requested seats are available.
-     - If total available seats ≥ seats requested.
-     - That seats cannot be negative or overbooked.
+   - Logged in user can book a number of seats via `/bookings`.
+   - Then the system will check:
+     - If the requested seats are available for the chosen event.
+     - If the total available seats ≥ seats requested.
+     - The seats can't be negative and handled dynamically for all CRUD operations related.
    - Updates `event.availableSeats` by subtracting the booked count.
 
 2. **Updating a Booking:**
-   - Adds previously booked seats back to availability.
-   - Re-checks new seat count against `event.availableSeats`.
-   - Applies new booking if seats are valid.
+   - Checks for seat availability (Two cases the new event is either same/different).
+   - If sufficient it adds back the previously booked event seats to the `event.availableSeats`.
+   - Updates the seats for new event (if applicable) or re-calculates for same one.
    - Ensures total seats never go negative.
 
 3. **Updating an Event:**
-   - When updating `totalSeats`:
-     - Calculates already booked seats.
-     - Ensures new total is not less than already booked seats.
-     - Dynamically recalculates `availableSeats`.
+   - Checks for `event.totalSeats`
+     - It calculates all booked seats.
+     - Checks if the new total is not lesser than already booked ones.
+     - Dynamically recalculates `availableSeats` for that event.
 
-4. **Deleting a Booking:**
-   - Cancels booking and re-adds booked seats to `event.availableSeats`.
+4. **Delete a Booking:**
+   - Removes the booking and add back the booked seats to `event.availableSeats`.
 
-5. **Deleting a User or Event:**
-   - Automatically removes all related bookings.
-   - Prevents orphan records and preserves data integrity.
+5. **Delete a User or Event:**
+   - Removes the user/event (admin only)
+   - Also removes all related bookings via `booking.userId`.
 
----
-
-## ✅ Working Flow Summary
-
-```text
-1. Logged-in user books an event using `/bookings`
-2. User can view their bookings via `/bookings/my/:userId`
-3. Admin can manage all bookings
-4. Users can manage their own bookings
-5. Number of seats are handled and calculated:
-   - No overbooking
-   - No negative availability
-   - Safe recalculation of seats during update/delete
-   - Booking logic dynamically manages seats
-```
 ---
 
 ## 📎 Notes
 
-- All sensitive routes are protected by middleware for authentication and authorization.
+- Every sensitive routes are protected via middlewares with rol based control access.
 - Swagger is used for documenting and testing APIs.
-- All endpoints are tested
+- All endpoints are tested successfully.
 
 ## 🚀 Installation
 
