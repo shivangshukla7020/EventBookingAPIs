@@ -1,12 +1,6 @@
 node_modules
 .env
 .git
-*.log
 Dockerfile
 .dockerignore
-README.md
-*.md
-coverage
-.vscode
-.idea
-*.test.js
+readme.md

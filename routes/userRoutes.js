@@ -81,8 +81,6 @@ router.post('/login', loginUser);
  *   post:
  *     summary: Log out the current user (logged in user)
  *     tags: [Users]
- *     security:
- *       - cookieAuth: []
  *     responses:
  *       200:
  *         description: Logout successful
@@ -97,8 +95,6 @@ router.post('/logout', isLoggedIn, logoutUser);
  *   get:
  *     summary: Get all users (admin)
  *     tags: [Users]
- *     security:
- *       - cookieAuth: []
  *     responses:
  *       200:
  *         description: List of all users
@@ -122,8 +118,6 @@ router.get('/',isLoggedIn, isAdmin, getAllUsers);
  *           type: string
  *         required: true
  *         description: ID of the user
- *     security:
- *       - cookieAuth: []
  *     responses:
  *       200:
  *         description: User data
@@ -149,8 +143,6 @@ router.get('/:userId', isLoggedIn, authorizeUserOrAdmin, findById);
  *           type: string
  *         required: true
  *         description: ID of the user
- *     security:
- *       - cookieAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -189,8 +181,6 @@ router.put('/:userId',isLoggedIn, authorizeUserOrAdmin, updateById);
  *           type: string
  *         required: true
  *         description: ID of the user
- *     security:
- *       - cookieAuth: []
  *     responses:
  *       200:
  *         description: User deleted successfully
