@@ -97,7 +97,7 @@ ADMIN_PASSWORD=admin123
 
 1. Register an accound using `/users/signup`
 2. Log in via `/users/login` → JWT token is issued in the cookies
-3. Access your data `/users/:userId` (same used for update and delete via PUT and DELETE req)
+3. Access your data `/users/:userId` (same route is used for update and delete via PUT and DELETE req)
 4. Log out using `/users/logout`
 
 ### Admin Workflow
