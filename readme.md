@@ -10,6 +10,7 @@ A RESTful API for managing users, events, and bookings built using Node.js, Expr
 - PostgreSQL
 - JWT (Authentication)
 - Swagger (API Documentation)
+- docker (image + container)
 
 ---
 
